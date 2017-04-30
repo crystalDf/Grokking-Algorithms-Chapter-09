@@ -10,32 +10,29 @@ class Item:
 
 def dynamic_programming(item_arr, column_num, cell, granularity):
 
-    if cell is None:
-        old_cell_size = 0
-        cell = [[[] for col in range(column_num)]
-                for row in range(len(item_arr))]
-    else:
-        old_cell_size = len(cell)
+    old_cell_size = 0 if cell is None else len(cell)
 
-        for row in range(len(item_arr) - old_cell_size):
-            new_row = [[] for col in range(column_num)]
-            cell.append(new_row)
+    for row in range(len(item_arr) - old_cell_size):
+        new_row = [[] for col in range(column_num)]
+        cell.append(new_row)
 
     for i in range(old_cell_size, len(item_arr)):
         for j in range(column_num):
+
+            item_col = int(item_arr[i].cost / granularity - 1)
+
             if i == 0:
                 first_arr = []
-                if j + 1 >= item_arr[i].cost / granularity:
+                if j >= item_col:
                     second_arr = [item_arr[i]]
                 else:
                     second_arr = []
             else:
                 first_arr = cell[i - 1][j]
-                if j + 1 == item_arr[i].cost / granularity:
+                if j == item_col:
                     second_arr = [item_arr[i]]
-                elif j + 1 > item_arr[i].cost / granularity:
-                    second_arr = cell[i - 1][int(j - item_arr[i].cost /
-                                                 granularity)] + [item_arr[i]]
+                elif j > item_col:
+                    second_arr = cell[i - 1][j - item_col - 1] + [item_arr[i]]
                 else:
                     second_arr = []
 
@@ -87,7 +84,7 @@ def format_print_cells(item_arr, column_num, cells, granularity):
 
 # Set condition
 
-my_cell = None
+my_cell = []
 my_capacity = 4
 my_granularity = 1
 my_column_num = int(my_capacity / my_granularity)
@@ -129,7 +126,7 @@ format_print_cells(my_item_arr, my_column_num, my_cell, my_granularity)
 
 # Reset condition
 
-my_cell = None
+my_cell = []
 my_capacity = 4
 my_granularity = 0.5
 my_column_num = int(my_capacity / my_granularity)
@@ -147,7 +144,7 @@ format_print_cells(my_item_arr, my_column_num, my_cell, my_granularity)
 
 # Reset condition
 
-my_cell = None
+my_cell = []
 my_capacity = 2
 my_granularity = 0.5
 my_column_num = int(my_capacity / my_granularity)
@@ -170,7 +167,7 @@ format_print_cells(my_item_arr, my_column_num, my_cell, my_granularity)
 
 # Reset condition
 
-my_cell = None
+my_cell = []
 my_capacity = 6
 my_granularity = 1
 my_column_num = int(my_capacity / my_granularity)
